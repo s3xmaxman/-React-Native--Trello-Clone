@@ -2,7 +2,7 @@ import { AuthStrategy, ModalType } from "@/types/enums";
 import { Ionicons } from "@expo/vector-icons";
 import { BottomSheetView } from "@gorhom/bottom-sheet";
 import { Image, Text, TouchableOpacity, StyleSheet } from "react-native";
-// import { useWarmUpBrowser } from '@/hooks/useWarmUpBrowser';
+import { useWarmUpBrowser } from "@/hooks/useWarmUpBrowser";
 import { useOAuth, useSignIn, useSignUp } from "@clerk/clerk-expo";
 
 const LOGIN_OPTIONS = [
@@ -33,18 +33,18 @@ interface AuthModalProps {
 }
 
 const AuthModal = ({ authType }: AuthModalProps) => {
-  // useWarmUpBrowser();
+  useWarmUpBrowser();
   const { startOAuthFlow: googleAuth } = useOAuth({
     strategy: AuthStrategy.Google,
   });
   const { startOAuthFlow: microsoftAuth } = useOAuth({
     strategy: AuthStrategy.Microsoft,
   });
-  const { startOAuthFlow: appleAuth } = useOAuth({
-    strategy: AuthStrategy.Apple,
-  });
   const { startOAuthFlow: slackAuth } = useOAuth({
     strategy: AuthStrategy.Slack,
+  });
+  const { startOAuthFlow: appleAuth } = useOAuth({
+    strategy: AuthStrategy.Apple,
   });
   const { signUp, setActive } = useSignUp();
   const { signIn } = useSignIn();

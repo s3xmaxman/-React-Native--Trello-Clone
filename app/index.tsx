@@ -10,7 +10,6 @@ import {
   BottomSheetBackdrop,
 } from "@gorhom/bottom-sheet";
 import AuthModal from "@/components/AuthModal";
-// @ts-ignore
 import { useCallback, useMemo, useRef, useState } from "react";
 
 export default function Index() {
