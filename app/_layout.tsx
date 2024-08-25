@@ -39,9 +39,9 @@ const RootLayoutNav = () => {
       publishableKey={CLERK_PUBLISHABLE_KEY!}
       tokenCache={tokenCache}
     >
-      <StatusBar style="light" />
+      <StatusBar barStyle="light-content" />
       <ActionSheetProvider>
-        <GestureHandlerRootView>
+        <GestureHandlerRootView style={{ flex: 1 }}>
           <InitialLayout />
         </GestureHandlerRootView>
       </ActionSheetProvider>

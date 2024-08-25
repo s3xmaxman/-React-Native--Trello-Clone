@@ -57,7 +57,12 @@ const AuthModal = ({ authType }: AuthModalProps) => {
    */
   const onSelectAuth = async (strategy: AuthStrategy) => {
     // signInとsignUpが両方とも存在するかどうかを確認
-    if (!signIn || !signUp) return null;
+    if (!signIn || !signUp) {
+      console.log("signInまたはsignUpが存在しません");
+      return null;
+    }
+
+    console.log("選択された認証戦略:", strategy);
 
     /**
      * 認証戦略に基づいて、対応する認証関数を選択します。
@@ -69,6 +74,8 @@ const AuthModal = ({ authType }: AuthModalProps) => {
       [AuthStrategy.Apple]: appleAuth,
     }[strategy];
 
+    console.log("選択された認証関数:", selectedAuth);
+
     /**
      * ユーザーが存在するがサインインする必要があるかどうかを確認
      */
@@ -78,15 +85,19 @@ const AuthModal = ({ authType }: AuthModalProps) => {
         "external_account_exists";
 
     if (userExistsButNeedsToSignIn) {
+      console.log("ユーザーが存在し、サインインが必要です");
+
       /**
        * サインインプロセスを実行
        */
       const res = await signIn.create({ transfer: true });
+      console.log("サインイン結果:", res);
 
       if (res.status === "complete") {
         setActive({
           session: res.createdSessionId,
         });
+        console.log("サインイン成功:", res.createdSessionId);
       }
     }
 
@@ -97,35 +108,41 @@ const AuthModal = ({ authType }: AuthModalProps) => {
       signIn.firstFactorVerification.status === "transferable";
 
     if (userNeedsToBeCreated) {
+      console.log("ユーザーが存在せず、作成が必要です");
+
       /**
        * サインアッププロセスを実行
        */
       const res = await signUp.create({
         transfer: true,
       });
+      console.log("サインアップ結果:", res);
 
       if (res.status === "complete") {
         setActive({
           session: res.createdSessionId,
         });
+        console.log("サインアップ成功:", res.createdSessionId);
       }
     } else {
       try {
+        console.log("認証関数を実行中...");
+
         /**
          * 認証関数を実行
          */
         const { createdSessionId, setActive } = await selectedAuth();
+        console.log("認証結果:", { createdSessionId, setActive });
 
         if (createdSessionId) {
           setActive!({ session: createdSessionId });
-          console.log("OAuth success standard");
+          console.log("OAuth成功:", createdSessionId);
         }
       } catch (err) {
-        console.error("OAuth error", err);
+        console.log("OAuthエラー:", err);
       }
     }
   };
-
   return (
     <BottomSheetView style={[styles.modalContainer]}>
       <TouchableOpacity style={styles.modalBtn}>
