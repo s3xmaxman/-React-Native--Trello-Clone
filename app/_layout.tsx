@@ -1,9 +1,10 @@
-import { Stack } from "expo-router";
+import { Redirect, Stack, useRouter } from "expo-router";
 import { ActionSheetProvider } from "@expo/react-native-action-sheet";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { StatusBar } from "react-native";
 import * as SecureStore from "expo-secure-store";
-import { ClerkProvider } from "@clerk/clerk-expo";
+import { ClerkProvider, useAuth } from "@clerk/clerk-expo";
+import { useEffect } from "react";
 
 const CLERK_PUBLISHABLE_KEY = process.env
   .EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY as string;

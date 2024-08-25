@@ -58,7 +58,6 @@ const AuthModal = ({ authType }: AuthModalProps) => {
   const onSelectAuth = async (strategy: AuthStrategy) => {
     // signInとsignUpが両方とも存在するかどうかを確認
     if (!signIn || !signUp) {
-      console.log("signInまたはsignUpが存在しません");
       return null;
     }
 
@@ -137,6 +136,8 @@ const AuthModal = ({ authType }: AuthModalProps) => {
         if (createdSessionId) {
           setActive!({ session: createdSessionId });
           console.log("OAuth成功:", createdSessionId);
+        } else {
+          console.log("OAuth失敗: createdSessionIdが空です");
         }
       } catch (err) {
         console.log("OAuthエラー:", err);
