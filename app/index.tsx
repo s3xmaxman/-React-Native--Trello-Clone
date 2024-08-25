@@ -1,4 +1,3 @@
-import { useCallback, useMemo, useRef, useState } from "react";
 import { Colors } from "@/constants/Colors";
 import { ModalType } from "@/types/enums";
 import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
@@ -11,6 +10,8 @@ import {
   BottomSheetBackdrop,
 } from "@gorhom/bottom-sheet";
 import AuthModal from "@/components/AuthModal";
+// @ts-ignore
+import { useCallback, useMemo, useRef, useState } from "react";
 
 export default function Index() {
   const { top } = useSafeAreaInsets();
