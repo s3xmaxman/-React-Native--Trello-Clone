@@ -1,7 +1,12 @@
 import { View, Text } from "react-native";
 import React from "react";
+import { ModalType } from "@/types/enums";
 
-const AuthModal = () => {
+interface AuthModalProps {
+  authType: ModalType | null;
+}
+
+const AuthModal = ({ authType }: AuthModalProps) => {
   return (
     <View>
       <Text>AuthModal</Text>
