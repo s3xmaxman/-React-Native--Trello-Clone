@@ -39,13 +39,11 @@ const RootLayoutNav = () => {
       publishableKey={CLERK_PUBLISHABLE_KEY!}
       tokenCache={tokenCache}
     >
+      <StatusBar style="light" />
       <ActionSheetProvider>
-        <>
-          <StatusBar style="light" />
-          <GestureHandlerRootView>
-            <InitialLayout />
-          </GestureHandlerRootView>
-        </>
+        <GestureHandlerRootView>
+          <InitialLayout />
+        </GestureHandlerRootView>
       </ActionSheetProvider>
     </ClerkProvider>
   );

@@ -1,8 +1,9 @@
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
-import React from "react";
 import { AuthStrategy, ModalType } from "@/types/enums";
-import { BottomSheetView } from "@gorhom/bottom-sheet";
 import { Ionicons } from "@expo/vector-icons";
+import { BottomSheetView } from "@gorhom/bottom-sheet";
+import { Image, Text, TouchableOpacity, StyleSheet } from "react-native";
+// import { useWarmUpBrowser } from '@/hooks/useWarmUpBrowser';
+import { useOAuth, useSignIn, useSignUp } from "@clerk/clerk-expo";
 
 const LOGIN_OPTIONS = [
   {
@@ -32,7 +33,99 @@ interface AuthModalProps {
 }
 
 const AuthModal = ({ authType }: AuthModalProps) => {
-  const onSelectAuth = async (strategy: AuthStrategy) => {};
+  // useWarmUpBrowser();
+  const { startOAuthFlow: googleAuth } = useOAuth({
+    strategy: AuthStrategy.Google,
+  });
+  const { startOAuthFlow: microsoftAuth } = useOAuth({
+    strategy: AuthStrategy.Microsoft,
+  });
+  const { startOAuthFlow: appleAuth } = useOAuth({
+    strategy: AuthStrategy.Apple,
+  });
+  const { startOAuthFlow: slackAuth } = useOAuth({
+    strategy: AuthStrategy.Slack,
+  });
+  const { signUp, setActive } = useSignUp();
+  const { signIn } = useSignIn();
+
+  /**
+   * onSelectAuth関数は、認証戦略を受け取り、認証プロセスを実行します。
+   *
+   * @param {AuthStrategy} strategy - 認証戦略
+   * @returns {Promise<void>} 認証プロセスの結果
+   */
+  const onSelectAuth = async (strategy: AuthStrategy) => {
+    // signInとsignUpが両方とも存在するかどうかを確認
+    if (!signIn || !signUp) return null;
+
+    /**
+     * 認証戦略に基づいて、対応する認証関数を選択します。
+     */
+    const selectedAuth = {
+      [AuthStrategy.Google]: googleAuth,
+      [AuthStrategy.Microsoft]: microsoftAuth,
+      [AuthStrategy.Slack]: slackAuth,
+      [AuthStrategy.Apple]: appleAuth,
+    }[strategy];
+
+    /**
+     * ユーザーが存在するがサインインする必要があるかどうかを確認
+     */
+    const userExistsButNeedsToSignIn =
+      signUp.verifications.externalAccount.status === "transferable" &&
+      signUp.verifications.externalAccount.error?.code ===
+        "external_account_exists";
+
+    if (userExistsButNeedsToSignIn) {
+      /**
+       * サインインプロセスを実行
+       */
+      const res = await signIn.create({ transfer: true });
+
+      if (res.status === "complete") {
+        setActive({
+          session: res.createdSessionId,
+        });
+      }
+    }
+
+    /**
+     * ユーザーが存在しないが作成する必要があるかどうかを確認
+     */
+    const userNeedsToBeCreated =
+      signIn.firstFactorVerification.status === "transferable";
+
+    if (userNeedsToBeCreated) {
+      /**
+       * サインアッププロセスを実行
+       */
+      const res = await signUp.create({
+        transfer: true,
+      });
+
+      if (res.status === "complete") {
+        setActive({
+          session: res.createdSessionId,
+        });
+      }
+    } else {
+      try {
+        /**
+         * 認証関数を実行
+         */
+        const { createdSessionId, setActive } = await selectedAuth();
+
+        if (createdSessionId) {
+          setActive!({ session: createdSessionId });
+          console.log("OAuth success standard");
+        }
+      } catch (err) {
+        console.error("OAuth error", err);
+      }
+    }
+  };
+
   return (
     <BottomSheetView style={[styles.modalContainer]}>
       <TouchableOpacity style={styles.modalBtn}>
