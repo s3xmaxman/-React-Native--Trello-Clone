@@ -22,7 +22,7 @@ const DropdownPlus = () => {
               router.push("(authenticated)/(tabs)/boards/new-board")
             }
           >
-            <DropdownMenu.ItemTitle>Create a board</DropdownMenu.ItemTitle>
+            <DropdownMenu.ItemTitle>ボードを作成</DropdownMenu.ItemTitle>
             <DropdownMenu.ItemIcon
               ios={{
                 name: "square.split.2x1",
@@ -32,7 +32,7 @@ const DropdownPlus = () => {
           </DropdownMenu.Item>
 
           <DropdownMenu.Item key="card">
-            <DropdownMenu.ItemTitle>Create a card</DropdownMenu.ItemTitle>
+            <DropdownMenu.ItemTitle>カードを作成</DropdownMenu.ItemTitle>
             <DropdownMenu.ItemIcon
               ios={{
                 name: "square.topthird.inset.filled",
@@ -48,7 +48,7 @@ const DropdownPlus = () => {
             router.push("(authenticated)/(tabs)/boards/templates")
           }
         >
-          <DropdownMenu.ItemTitle>Browse Templates</DropdownMenu.ItemTitle>
+          <DropdownMenu.ItemTitle>テンプレート</DropdownMenu.ItemTitle>
           <DropdownMenu.ItemIcon
             ios={{
               name: "square.on.square.dashed",

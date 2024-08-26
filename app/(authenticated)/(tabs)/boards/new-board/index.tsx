@@ -1,6 +1,6 @@
-import { DEFAULT_COLOR } from "@/app/(authenticated)/(tabs)/boards/new-board/color-select";
 import { Colors } from "@/constants/Colors";
 import { useSupabase } from "@/context/SupabaseContext";
+import { DEFAULT_COLOR } from "@/types/enums";
 import { Ionicons } from "@expo/vector-icons";
 import {
   Link,
@@ -55,7 +55,7 @@ const Page = () => {
       />
 
       <Link
-        href={"/( authenticated )/(tabs)/boards/new-board/color-select"}
+        href={"/(authenticated)/(tabs)/boards/new-board/color-select"}
         asChild
       >
         <TouchableOpacity style={styles.btnItem}>

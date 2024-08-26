@@ -1,20 +1,8 @@
 import { Colors } from "@/constants/Colors";
+import { COLORS, DEFAULT_COLOR } from "@/types/enums";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { View, TouchableOpacity } from "react-native";
-
-const COLORS = [
-  "#0079bf",
-  "#d29034",
-  "#519839",
-  "#b04632",
-  "#89609e",
-  "#cd5a91",
-  "#4bbf6b",
-  "#00aecc",
-  "#838c91",
-];
-export const DEFAULT_COLOR = COLORS[0];
 
 const Page = () => {
   const [selected, setSelected] = useState<string>(DEFAULT_COLOR);
