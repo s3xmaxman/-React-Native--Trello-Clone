@@ -73,77 +73,22 @@ const AuthModal = ({ authType }: AuthModalProps) => {
       [AuthStrategy.Apple]: appleAuth,
     }[strategy];
 
-    console.log("選択された認証関数:", selectedAuth);
+    try {
+      const { createdSessionId, setActive } = await selectedAuth();
+      // ClerkのページでAuthentication strategiesのPasswordをTrueにしないと、認証できない。
+      console.log("認証結果:", { createdSessionId, setActive });
 
-    /**
-     * ユーザーが存在するがサインインする必要があるかどうかを確認
-     */
-    const userExistsButNeedsToSignIn =
-      signUp.verifications.externalAccount.status === "transferable" &&
-      signUp.verifications.externalAccount.error?.code ===
-        "external_account_exists";
-
-    if (userExistsButNeedsToSignIn) {
-      console.log("ユーザーが存在し、サインインが必要です");
-
-      /**
-       * サインインプロセスを実行
-       */
-      const res = await signIn.create({ transfer: true });
-      console.log("サインイン結果:", res);
-
-      if (res.status === "complete") {
-        setActive({
-          session: res.createdSessionId,
-        });
-        console.log("サインイン成功:", res.createdSessionId);
+      if (createdSessionId) {
+        setActive!({ session: createdSessionId });
+        console.log("OAuth成功:", createdSessionId);
+      } else {
+        console.log("OAuth失敗: createdSessionIdが空です");
       }
-    }
-
-    /**
-     * ユーザーが存在しないが作成する必要があるかどうかを確認
-     */
-    const userNeedsToBeCreated =
-      signIn.firstFactorVerification.status === "transferable";
-
-    if (userNeedsToBeCreated) {
-      console.log("ユーザーが存在せず、作成が必要です");
-
-      /**
-       * サインアッププロセスを実行
-       */
-      const res = await signUp.create({
-        transfer: true,
-      });
-      console.log("サインアップ結果:", res);
-
-      if (res.status === "complete") {
-        setActive({
-          session: res.createdSessionId,
-        });
-        console.log("サインアップ成功:", res.createdSessionId);
-      }
-    } else {
-      try {
-        console.log("認証関数を実行中...");
-
-        /**
-         * 認証関数を実行
-         */
-        const { createdSessionId, setActive } = await selectedAuth();
-        console.log("認証結果:", { createdSessionId, setActive });
-
-        if (createdSessionId) {
-          setActive!({ session: createdSessionId });
-          console.log("OAuth成功:", createdSessionId);
-        } else {
-          console.log("OAuth失敗: createdSessionIdが空です");
-        }
-      } catch (err) {
-        console.log("OAuthエラー:", err);
-      }
+    } catch (err) {
+      console.log("OAuthエラー:", err);
     }
   };
+
   return (
     <BottomSheetView style={[styles.modalContainer]}>
       <TouchableOpacity style={styles.modalBtn}>

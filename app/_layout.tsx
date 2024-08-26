@@ -6,9 +6,6 @@ import * as SecureStore from "expo-secure-store";
 import { ClerkProvider, useAuth } from "@clerk/clerk-expo";
 import { useEffect } from "react";
 
-const CLERK_PUBLISHABLE_KEY = process.env
-  .EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY as string;
-
 const tokenCache = {
   async getToken(key: string) {
     try {
@@ -37,7 +34,7 @@ const InitialLayout = () => {
 const RootLayoutNav = () => {
   return (
     <ClerkProvider
-      publishableKey={CLERK_PUBLISHABLE_KEY!}
+      publishableKey={process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!}
       tokenCache={tokenCache}
     >
       <StatusBar barStyle="light-content" />
