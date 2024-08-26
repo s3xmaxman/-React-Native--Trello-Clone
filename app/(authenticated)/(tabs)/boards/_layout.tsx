@@ -21,7 +21,6 @@ const Layout = () => {
               source={require("@/assets/images/trello-logo-gradient-white.png")}
             />
           ),
-          headerRight: () => <DropdownPlus />,
         }}
       />
       <Stack.Screen

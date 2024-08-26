@@ -48,8 +48,30 @@ const Page = () => {
   );
 
   return (
-    <View>
-      <Text>Page</Text>
+    <View style={styles.container}>
+      <Stack.Screen
+        options={{
+          headerRight: () => <DropdownPlus />,
+        }}
+      />
+      <FlatList
+        contentContainerStyle={boards.length > 0 && styles.list}
+        data={boards}
+        keyExtractor={(item) => `${item.id}`}
+        renderItem={ListItem}
+        ItemSeparatorComponent={() => (
+          <View
+            style={{
+              height: StyleSheet.hairlineWidth,
+              backgroundColor: Colors.grey,
+              marginStart: 50,
+            }}
+          />
+        )}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={loadBoards} />
+        }
+      />
     </View>
   );
 };
