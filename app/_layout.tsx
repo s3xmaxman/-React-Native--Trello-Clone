@@ -31,11 +31,15 @@ const InitialLayout = () => {
   const segments = useSegments();
 
   useEffect(() => {
-    if (!isLoaded) {
-      return;
-    }
+    if (!isLoaded) return;
 
     const inAuthGroup = segments[0] === "(authenticated)";
+
+    if (isSignedIn && !inAuthGroup) {
+      router.replace("/(authenticated)/(tabs)/boards");
+    } else if (!isSignedIn) {
+      router.replace("/");
+    }
   }, [isSignedIn]);
 
   if (!isLoaded) {
@@ -50,6 +54,7 @@ const InitialLayout = () => {
     <SupabaseProvider>
       <Stack>
         <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack.Screen name="(authenticated)" options={{ headerShown: false }} />
       </Stack>
     </SupabaseProvider>
   );
