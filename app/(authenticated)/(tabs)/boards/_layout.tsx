@@ -22,15 +22,15 @@ const Layout = () => {
           ),
         }}
       />
-      {/* <Stack.Screen
+      <Stack.Screen
         name="new-board"
         options={{
           headerShown: false,
           presentation: "modal",
         }}
-      /> */}
+      />
 
-      {/* <Stack.Screen
+      <Stack.Screen
         name="templates"
         options={{
           title: "Start with a template",
@@ -48,7 +48,7 @@ const Layout = () => {
             </TouchableOpacity>
           ),
         }}
-      /> */}
+      />
     </Stack>
   );
 };
