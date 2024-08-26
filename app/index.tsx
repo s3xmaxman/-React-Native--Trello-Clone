@@ -11,6 +11,7 @@ import {
 } from "@gorhom/bottom-sheet";
 import AuthModal from "@/components/AuthModal";
 import { useCallback, useMemo, useRef, useState } from "react";
+import { useSupabase } from "@/context/SupabaseContext";
 
 export default function Index() {
   const { top } = useSafeAreaInsets();
@@ -18,6 +19,8 @@ export default function Index() {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const snapPoints = useMemo(() => ["30%"], []);
   const [authType, setAuthType] = useState<ModalType | null>(null);
+
+  const { getBoards } = useSupabase();
 
   const showModal = async (type: ModalType) => {
     setAuthType(type);
@@ -34,7 +37,6 @@ export default function Index() {
       "キャンセル",
     ];
     const cancelButtonIndex = 2;
-
     showActionSheetWithOptions(
       {
         options,
@@ -46,7 +48,6 @@ export default function Index() {
           case 1:
             // お問い合わせの処理をここに追加
             break;
-
           case cancelButtonIndex:
             // キャンセル時の処理をここに追加
             break;

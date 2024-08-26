@@ -5,6 +5,7 @@ import { StatusBar } from "react-native";
 import * as SecureStore from "expo-secure-store";
 import { ClerkProvider, useAuth } from "@clerk/clerk-expo";
 import { useEffect } from "react";
+import { SupabaseProvider } from "@/context/SupabaseContext";
 
 const tokenCache = {
   async getToken(key: string) {
@@ -25,9 +26,11 @@ const tokenCache = {
 
 const InitialLayout = () => {
   return (
-    <Stack>
-      <Stack.Screen name="index" options={{ headerShown: false }} />
-    </Stack>
+    <SupabaseProvider>
+      <Stack>
+        <Stack.Screen name="index" options={{ headerShown: false }} />
+      </Stack>
+    </SupabaseProvider>
   );
 };
 
