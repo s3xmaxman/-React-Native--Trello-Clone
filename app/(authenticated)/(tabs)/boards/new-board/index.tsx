@@ -21,9 +21,20 @@ import {
 const Page = () => {
   const [boardName, setBoardName] = useState("");
   const [selectedColor, setSelectedColor] = useState<string>(DEFAULT_COLOR);
+  const { bg } = useGlobalSearchParams<{ bg?: string }>();
+  const { createBoard } = useSupabase();
   const router = useRouter();
 
-  const onCreateBoard = async () => {};
+  useEffect(() => {
+    if (bg) {
+      setSelectedColor(bg);
+    }
+  }, [bg]);
+
+  const onCreateBoard = async () => {
+    await createBoard!(boardName, selectedColor);
+    router.dismiss();
+  };
 
   return (
     <View style={{ marginVertical: 10 }}>

@@ -64,4 +64,5 @@ export const COLORS = [
   "#00aecc",
   "#838c91",
 ];
+
 export const DEFAULT_COLOR = COLORS[0];
