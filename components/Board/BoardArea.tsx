@@ -1,4 +1,3 @@
-// import ListStart from '@/components/Board/ListStart';
 import ListView from "@/components/Board/ListView";
 import { Colors } from "@/constants/Colors";
 import { useSupabase } from "@/context/SupabaseContext";
@@ -29,20 +28,47 @@ const BoardArea = ({ board }: BoardAreaProps) => {
     { id: undefined },
   ]);
   const [startListActive, setStartListActive] = useState(false);
+  const scrollOffsetValue = useSharedValue<number>(0);
+  const progress = useSharedValue<number>(0);
 
-  const onSaveNewList = async (title: string) => {};
+  useEffect(() => {
+    loadBoardLists();
+  }, [board]);
+
+  const loadBoardLists = async () => {
+    if (!board) return;
+    const lists = await getBoardLists!(board!.id);
+    setData([...lists, { id: undefined }]);
+  };
+
+  const onSaveNewList = async (title: string) => {
+    setStartListActive(false);
+    const { data: newItem } = await addBoardList!(board!.id, title);
+    data.pop();
+    setData([...data, newItem, { id: undefined }]);
+  };
+
+  const onPressPagination = (index: number) => {
+    ref.current?.scrollTo({
+      count: index - progress.value,
+      animated: true,
+    });
+  };
 
   return (
     <SafeAreaView style={{ flex: 1 }} edges={["bottom"]}>
       <Carousel
-        data={data}
         width={width}
         height={height}
         loop={false}
         ref={ref}
+        onProgressChange={progress}
+        defaultScrollOffsetValue={scrollOffsetValue}
+        data={data}
+        pagingEnabled={true}
         renderItem={({ index, item }: any) => (
           <>
-            {item.id && <></>}
+            {item.id && <Text>{item.title}</Text>}
             {item.id === undefined && (
               <View
                 key={index}
@@ -68,6 +94,15 @@ const BoardArea = ({ board }: BoardAreaProps) => {
             )}
           </>
         )}
+      />
+      <Pagination.Basic
+        progress={progress}
+        data={data}
+        dotStyle={{ backgroundColor: "#ffffff5c", borderRadius: 40 }}
+        size={8}
+        activeDotStyle={{ backgroundColor: "#fff" }}
+        containerStyle={{ gap: 10, marginTop: 10 }}
+        onPress={onPressPagination}
       />
     </SafeAreaView>
   );
