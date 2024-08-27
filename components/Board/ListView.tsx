@@ -25,8 +25,9 @@ import { DefaultTheme } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
 import { useAuth } from "@clerk/clerk-expo";
-import ListItem from "@/components/Board/ListItem";
+
 import { RealtimePostgresChangesPayload } from "@supabase/supabase-js";
+import ListItem from "./ListItem";
 
 export interface ListViewProps {
   taskList: TaskList;
