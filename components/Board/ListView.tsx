@@ -112,7 +112,7 @@ const ListView = ({ taskList, onDelete }: ListViewProps) => {
   };
 
   const onUpdateTaskList = async () => {
-    const updated = await updateBoardList!(taskList, listName);
+    await updateBoardList!(taskList, listName);
   };
 
   const onAddCard = async () => {
@@ -122,12 +122,11 @@ const ListView = ({ taskList, onDelete }: ListViewProps) => {
       newTask,
       tasks.length
     );
+
     if (!error) {
       setIsAdding(false);
       setNewTask("");
     }
-    // Unnecessary when using realtime updates
-    // setTasks([...tasks, data]);
   };
 
   const onTaskDropped = async (params: DragEndParams<Task>) => {
@@ -142,7 +141,6 @@ const ListView = ({ taskList, onDelete }: ListViewProps) => {
   };
 
   const onSelectImage = async () => {
-    // await ImagePicker.requestCameraPermissionsAsync();
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
@@ -155,9 +153,11 @@ const ListView = ({ taskList, onDelete }: ListViewProps) => {
       const base64 = await FileSystem.readAsStringAsync(img.uri, {
         encoding: "base64",
       });
+
       const fileName = `${new Date().getTime()}-${userId}.${
         img.type === "image" ? "png" : "mp4"
       }`;
+
       const filePath = `${taskList.board_id}/${fileName}`;
       const contentType = img.type === "image" ? "image/png" : "video/mp4";
       const storagePath = await uploadFile!(filePath, base64, contentType);
