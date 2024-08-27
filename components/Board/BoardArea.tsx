@@ -15,6 +15,7 @@ import { useSharedValue } from "react-native-reanimated";
 import Carousel, { ICarouselInstance } from "react-native-reanimated-carousel";
 import { Pagination } from "react-native-reanimated-carousel";
 import { SafeAreaView } from "react-native-safe-area-context";
+import ListStart from "./ListStart";
 
 interface BoardAreaProps {
   board?: Board;
@@ -28,6 +29,8 @@ const BoardArea = ({ board }: BoardAreaProps) => {
     { id: undefined },
   ]);
   const [startListActive, setStartListActive] = useState(false);
+
+  const onSaveNewList = async (title: string) => {};
 
   return (
     <SafeAreaView style={{ flex: 1 }} edges={["bottom"]}>
@@ -45,6 +48,12 @@ const BoardArea = ({ board }: BoardAreaProps) => {
                 key={index}
                 style={{ paddingTop: 20, paddingHorizontal: 30 }}
               >
+                {startListActive && (
+                  <ListStart
+                    onCancel={() => setStartListActive(false)}
+                    onSave={onSaveNewList}
+                  />
+                )}
                 {!startListActive && (
                   <TouchableOpacity
                     onPress={() => setStartListActive(true)}
