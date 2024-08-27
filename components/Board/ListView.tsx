@@ -328,7 +328,7 @@ const ListView = ({ taskList, onDelete }: ListViewProps) => {
           </View>
 
           <TouchableOpacity onPress={onDeleteList} style={styles.deleteBtn}>
-            <Text>Close List</Text>
+            <Text style={{ color: "red" }}>削除</Text>
           </TouchableOpacity>
         </View>
       </BottomSheetModal>
