@@ -9,11 +9,73 @@ import {
   ScaleDecorator,
 } from "react-native-draggable-flatlist";
 
-const ListItem = () => {
+const ListItem = ({ item, drag, isActive }: RenderItemParams<Task>) => {
+  const { getFileFromPath } = useSupabase();
+  const router = useRouter();
+  const [imagePath, setImagePath] = useState<string>("");
+
+  if (item.image_url) {
+    getFileFromPath!(item.image_url).then((path) => {
+      if (path) {
+        setImagePath(path);
+      }
+    });
+  }
+
+  const openLink = () => {
+    router.push(`/board/card/${item.id}`);
+  };
+
   return (
-    <View>
-      <Text>ListItem</Text>
-    </View>
+    <ScaleDecorator>
+      <TouchableOpacity
+        activeOpacity={1}
+        onPress={openLink}
+        onLongPress={drag}
+        disabled={isActive}
+        style={[
+          styles.rowItem,
+          {
+            opacity: isActive ? 0.5 : 1,
+          },
+        ]}
+      >
+        {item.image_url && (
+          <>
+            {imagePath && (
+              <Image
+                source={{ uri: imagePath }}
+                style={{
+                  width: "100%",
+                  height: 200,
+                  borderRadius: 4,
+                  backgroundColor: "#f3f3f3",
+                }}
+              />
+            )}
+
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Text style={{ flex: 1 }}>{item.title}</Text>
+              {item.assigned_to && (
+                <Ionicons
+                  name="person-circle-outline"
+                  size={16}
+                  color={"#000"}
+                />
+              )}
+            </View>
+          </>
+        )}
+        {!item.image_url && (
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <Text style={{ flex: 1 }}>{item.title}</Text>
+            {item.assigned_to && (
+              <Ionicons name="person-circle-outline" size={16} color={"#000"} />
+            )}
+          </View>
+        )}
+      </TouchableOpacity>
+    </ScaleDecorator>
   );
 };
 
