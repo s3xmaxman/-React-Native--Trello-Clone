@@ -253,7 +253,7 @@ const ListView = ({ taskList, onDelete }: ListViewProps) => {
                   onPress={() => setIsAdding(true)}
                 >
                   <Ionicons name="add" size={14} />
-                  <Text style={{ fontSize: 12 }}>Add card</Text>
+                  <Text style={{ fontSize: 10 }}>カードを追加</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={onSelectImage}>
                   <Ionicons name="image-outline" size={18} />
@@ -264,7 +264,7 @@ const ListView = ({ taskList, onDelete }: ListViewProps) => {
               <>
                 <TouchableOpacity onPress={() => setIsAdding(false)}>
                   <Text style={{ color: Colors.primary, fontSize: 14 }}>
-                    Cancel
+                    キャンセル
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={onAddCard}>
@@ -275,7 +275,7 @@ const ListView = ({ taskList, onDelete }: ListViewProps) => {
                       fontWeight: "bold",
                     }}
                   >
-                    Add
+                    追加
                   </Text>
                 </TouchableOpacity>
               </>

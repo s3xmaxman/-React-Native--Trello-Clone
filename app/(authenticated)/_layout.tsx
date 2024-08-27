@@ -11,7 +11,7 @@ const Layout = () => {
       <Stack.Screen
         name="board/settings"
         options={{
-          title: "Board Menu",
+          title: "設定",
           headerLeft: () => (
             <TouchableOpacity
               onPress={() => router.back()}
@@ -35,6 +35,24 @@ const Layout = () => {
           headerStyle: {
             backgroundColor: DefaultTheme.colors.background,
           },
+        }}
+      />
+      <Stack.Screen
+        name="board/invite"
+        options={{
+          title: "メンバーを管理",
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() => router.back()}
+              style={{
+                backgroundColor: "#E3DFE9",
+                borderRadius: 16,
+                padding: 6,
+              }}
+            >
+              <Ionicons name="close" size={18} color={"#716E75"} />
+            </TouchableOpacity>
+          ),
         }}
       />
     </Stack>
