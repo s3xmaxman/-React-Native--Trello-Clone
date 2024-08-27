@@ -93,7 +93,7 @@ const Page = () => {
         }}
       />
 
-      {board && <BoardArea />}
+      {board && <BoardArea board={board} />}
     </View>
   );
 };
