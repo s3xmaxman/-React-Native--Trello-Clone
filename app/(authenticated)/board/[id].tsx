@@ -7,8 +7,8 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { BlurView } from "expo-blur";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-// import BoardArea from '@/components/Board/BoardArea';
 import { useHeaderHeight } from "@react-navigation/elements";
+import BoardArea from "@/components/Board/BoardArea";
 
 const Page = () => {
   const { id, bg } = useLocalSearchParams<{ id: string; bg?: string }>();
@@ -92,6 +92,8 @@ const Page = () => {
           header: () => <CustomHeader />,
         }}
       />
+
+      {board && <BoardArea />}
     </View>
   );
 };

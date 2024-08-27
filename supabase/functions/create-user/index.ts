@@ -29,7 +29,6 @@ serve(async (req: Request) => {
     });
   } catch (err) {
     console.log(err);
-
     return new Response(JSON.stringify({ error: err.message }), {
       headers: { 'Content-Type': 'application/json' },
       status: 400,
