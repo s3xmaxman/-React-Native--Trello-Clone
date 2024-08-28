@@ -4,18 +4,23 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
+  FlatList,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { Link, useLocalSearchParams, useRouter } from "expo-router";
 import { useSupabase } from "@/context/SupabaseContext";
 import { Colors } from "@/constants/Colors";
-import { Board } from "@/types/enums";
+import { Board, User } from "@/types/enums";
+import { Ionicons } from "@expo/vector-icons";
+import UserListItem from "@/components/UserListItem";
 
 const settings = () => {
   const { id } = useLocalSearchParams<{ id?: string }>();
-  const { getBoardInfo, updateBoard, deleteBoard } = useSupabase();
+  const { getBoardInfo, updateBoard, deleteBoard, getBoardMember } =
+    useSupabase();
   const router = useRouter();
   const [board, setBoard] = useState<Board>();
+  const [members, setMembers] = useState<User[]>();
 
   useEffect(() => {
     if (!id) return;
@@ -26,6 +31,9 @@ const settings = () => {
     if (!id) return;
     const data = await getBoardInfo!(id);
     setBoard(data);
+
+    const members = await getBoardMember!(id);
+    setMembers(members);
   };
 
   const onUpdateBoard = async () => {
@@ -54,6 +62,34 @@ const settings = () => {
           onEndEditing={onUpdateBoard}
         />
       </View>
+
+      <View style={styles.container}>
+        <View style={{ flexDirection: "row", gap: 14 }}>
+          <Ionicons name="person-outline" size={18} color={Colors.fontDark} />
+          <Text
+            style={{ fontWeight: "bold", color: Colors.fontDark, fontSize: 16 }}
+          >
+            メンバー
+          </Text>
+        </View>
+
+        <FlatList
+          data={members}
+          keyExtractor={(item) => item.id}
+          renderItem={(item) => (
+            <UserListItem element={item} onPress={() => {}} />
+          )}
+          contentContainerStyle={{ gap: 8 }}
+          style={{ marginVertical: 12 }}
+        />
+
+        <Link href={`/(authenticated)/board/invite?id=${id}`} asChild>
+          <TouchableOpacity style={styles.fullBtn}>
+            <Text style={{ fontSize: 16, color: Colors.fontLight }}>招待</Text>
+          </TouchableOpacity>
+        </Link>
+      </View>
+
       <TouchableOpacity onPress={onDeleteBoard} style={styles.deleteBtn}>
         <Text style={{ color: "red" }}>削除</Text>
       </TouchableOpacity>
