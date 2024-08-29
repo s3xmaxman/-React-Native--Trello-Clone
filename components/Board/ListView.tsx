@@ -67,37 +67,44 @@ const ListView = ({ taskList, onDelete }: ListViewProps) => {
     };
   }, [taskList.id]);
 
+  /**
+   * @description Supabaseのリアルタイム更新イベントを処理する関数
+   * @param {RealtimePostgresChangesPayload<any>} update - Supabaseのリアルタイム更新イベント情報
+   */
   const handleRealtimeChanges = (
     update: RealtimePostgresChangesPayload<any>
   ) => {
-    console.log("REALTIME UPDATE:", update);
+    // 更新または削除されたレコードを取得
     const record = update.new?.id ? update.new : update.old;
+    // イベントタイプを取得
     const event = update.eventType;
 
     if (!record) return;
 
-    if (event === "INSERT") {
-      setTasks((prev) => {
-        return [...prev, record];
-      });
-    } else if (event === "UPDATE") {
-      setTasks((prev) => {
-        return prev
-          .map((task) => {
-            if (task.id === record.id) {
-              return record;
-            }
-            return task;
-          })
-          .filter((task) => !task.done)
-          .sort((a, b) => a.position - b.position);
-      });
-    } else if (event === "DELETE") {
-      setTasks((prev) => {
-        return prev.filter((task) => task.id !== record.id);
-      });
-    } else {
-      console.log("Unhandled event", event);
+    // イベントタイプに応じて処理を分岐
+    switch (event) {
+      case "INSERT":
+        // 新しいタスクが追加された場合
+        setTasks((prevTasks) => [...prevTasks, record]);
+        break;
+      case "UPDATE":
+        // タスクが更新された場合
+        setTasks((prevTasks) =>
+          prevTasks
+            .map((task) => (task.id === record.id ? record : task))
+            .filter((task) => !task.done)
+            .sort((a, b) => a.position - b.position)
+        );
+        break;
+      case "DELETE":
+        // タスクが削除された場合
+        setTasks((prevTasks) =>
+          prevTasks.filter((task) => task.id !== record.id)
+        );
+        break;
+      default:
+        // 予期しないイベントが発生した場合
+        console.log("Unhandled event", event);
     }
   };
 
