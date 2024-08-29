@@ -22,9 +22,6 @@ const supabase = createClient(
 
 Deno.serve(async (req) => {
   const payload: WebhookPayload = await req.json();
-  console.log('🚀 ~ Deno.serve ~ payload:', payload);
-
-  console.log('get notification');
 
   const { data } = await supabase
     .from('users')
